@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>MobilLife Chore list</title>
+	<meta name="generator" content="BBEdit 10.5" />
+	<script src="http://fb.me/react-0.12.2.min.js"></script>
+	<script src="http://fb.me/JSXTransformer-0.12.2.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Waiting+for+the+Sunrise" rel="stylesheet">
+	<style>
+	body{font-family:sans-serif;font-size:100%;line-height:1.5}
+	h3{text-align:center;color:#444;padding:5px 0}
+	ul{list-style-type:lower-roman;margin:0 0 20px;line-height:20px}
+	input[type=text]{border:1px solid #ccc;padding:7px 5px;width:225px;margin-left:25px;font-size:14px;font-family:sans-serif}
+	button{border:1px solid #ccc;margin-left:15px;padding:5px 15px;font-size:.7em}
+	#Chore{font:normal 22px 'Waiting for the Sunrise',cursive,sans-serif;width:430px;margin:0 auto 10px;padding:6px 5px 4px 42px;position:relative;color:#444;line-height:24px;border:1px solid #d2d2d2;background:#fff;background:-webkit-gradient(linear,0 0,0 100%,from(#d9eaf3),color-stop(4%,#fff)) 0 4px;background:-webkit-linear-gradient(top,#d9eaf3 0%,#fff 8%) 0 4px;background:-moz-linear-gradient(top,#d9eaf3 0%,#fff 8%) 0 4px;background:-ms-linear-gradient(top,#d9eaf3 0%,#fff 8%) 0 4px;background:-o-linear-gradient(top,#d9eaf3 0%,#fff 8%) 0 4px;background:linear-gradient(top,#d9eaf3 0%,#fff 8%) 0 4px;-webkit-background-size:100% 20px;-moz-background-size:100% 20px;-ms-background-size:100% 20px;-o-background-size:100% 20px;background-size:100% 20px;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;-webkit-box-shadow:0 1px 2px rgba(0,0,0,0.07);-moz-box-shadow:0 1px 2px rgba(0,0,0,0.07);box-shadow:0 1px 2px rgba(0,0,0,0.07)}
+	#Chore::before{content:'';position:absolute;width:4px;top:0;left:30px;bottom:0;border:1px solid;border-color:transparent #efe4e4}
+	a:link{font-size: 20px;line-height:28px;color:#444;text-decoration:none;}
+	a:hover {color:#666;text-decoration:none;}
+	</style>
+</head>
+
+<body>
+<script type="text/jsx">
+var ChoreList = React.createClass({
+  createItem: function(itemText) {
+      return <li>{itemText}&nbsp;[<a href="javascript:void(0)" onClick={this.props.handleDelete.bind(this, itemText)} title="Click here to remove this chore">x</a>]</li>;
+  },
+
+  render: function() {
+    return <ul>{this.props.items.map(this.createItem)}</ul>;
+  }
+});
+var ChoreApp = React.createClass({
+  getInitialState: function() {
+  return {items: ['10am dentist appointment', 'pick up dry cleaning', 'get milk', 'ring Liama about storage boxes', 'organise childminder for Friday']};
+  },
+  handleDelete: function(itemToDelete, e) {
+    var newItems = _.reject(this.state.items, function(item) {
+        return item == itemToDelete
+    });
+    this.setState({items: newItems});
+  },
+  handleChange: function(e) {
+    this.setState({text: e.target.value});
+  },
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var nextItems = this.state.items.concat([this.state.text]);
+    var nextText = '';
+    this.setState({items: nextItems, text: nextText});
+  },
+  render: function() {
+    return (
+      <div id="Chore">
+        <h3>Wednesday's to do list.</h3>
+        <ChoreList items={this.state.items} handleDelete={this.handleDelete} />
+        <form onSubmit={this.handleSubmit}>
+          <input type='text' onChange={this.handleChange} value={this.state.text} />
+          <button>{'Add item no: #' + (this.state.items.length + 1)}</button>
+        </form>
+      </div>
+    );
+  }
+});
+React.renderComponent(<ChoreApp />, document.body);
+</script>
+</body>
+</html>
